@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'uuid';
 import { RecipesContextConsumer } from "../helpers/RecipesContext";
 
 class Recipe extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       isActive: false,
     }
   }
 
   static renderIngredients(listOfIngredients) {
+    let uniqueKey = '';
     return (
-      <ul>
-        {listOfIngredients.map((ingredient) => {
+      <ul className='app__recipe-ingredients'>
+        {listOfIngredients.map((ingredient, index) => {
+          uniqueKey = index.toString().concat(ingredient);
           return (
-            <li className='app__recipe-ingredient' key={uuid()}>
+            <li className='app__recipe-ingredient' key={uniqueKey}>
               {ingredient}
             </li>
           );
@@ -25,17 +26,25 @@ class Recipe extends Component {
     )
   }
 
-  static renderRecipeControls(recipeID) {
+  renderRecipeControls(recipeID) {
     return (
       <RecipesContextConsumer>
         {({ actions: { toggleModal, deleteRecipe }}) => {
           return (
             <div className='app__recipe-controls'>
-              <button onClick={() => deleteRecipe(recipeID)}>
-                Delete
-              </button>
-              <button onClick={() => toggleModal(recipeID)}>
+              <button
+                className='app__recipe-control button button--tertiary'
+                onClick={() => toggleModal(recipeID)}
+                ref={editRecipeButton => this.editRecipeButton = editRecipeButton}
+              >
                 Edit
+              </button>
+              <button
+                className='app__recipe-control button button--secondary'
+                onClick={() => deleteRecipe(recipeID)}
+                ref={deleteRecipeButton => this.deleteRecipeButton = deleteRecipeButton}
+              >
+                Delete
               </button>
             </div>
           );
@@ -44,17 +53,8 @@ class Recipe extends Component {
     )
   }
 
-  renderRecipeDetailsAndControls() {
-    const { recipe: { ingredients, id }} = this.props;
-    return (
-      <React.Fragment>
-        {Recipe.renderIngredients(ingredients)}
-        {Recipe.renderRecipeControls(id)}
-      </React.Fragment>
-    )
-  }
-
-  handleRecipeClick = () => {
+  handleRecipeClick = (e) => {
+    if (e.target === this.editRecipeButton || e.target === this.deleteRecipeButton) return e.preventDefault();
     this.setState((prevState) => {
       return {
         isActive: !prevState.isActive
@@ -63,20 +63,25 @@ class Recipe extends Component {
   };
 
   render() {
-    const { recipe: { name }} = this.props;
+    const {
+      recipe: { name, ingredients, id }
+    } = this.props;
     const { isActive } = this.state;
 
     return (
       <div
         className='app__recipe'
+        onClick={this.handleRecipeClick}
       >
         <p
           className='app__recipe-name'
-          onClick={this.handleRecipeClick}
         >
           {name}
         </p>
-        {isActive && this.renderRecipeDetailsAndControls()}
+        <div className='app__recipe-content'>
+          {isActive && Recipe.renderIngredients(ingredients)}
+          {isActive && this.renderRecipeControls(id)}
+        </div>
       </div>
     )
   }

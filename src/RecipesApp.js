@@ -1,25 +1,37 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
+import Header from './components/Header';
+import Jumbotron from './components/Jumbotron';
 import RecipesList from './components/RecipesList';
-import RecipeModal from './components/RecipeModal';
+import Modal from './components/Modal';
+import Loader from './components/Loader';
+import RecipeForm from "./components/RecipeForm";
+import CONFIG from './config';
 import store from './store/store.json';
 import { RecipesContext } from './helpers/RecipesContext';
 import { saveItem, returnItem } from './helpers/storageHelpers';
-import CONFIG from './config';
+import { translateTextToArray } from "./helpers/stringHelpers";
 
 class RecipesApp extends Component {
   constructor() {
     super();
     this.state = {
-      recipesList: [ ...store.recipesList ],
+      recipesList: [],
       activeRecipeID: '',
       showModal: false,
+      dataAvailable: false,
     }
   }
 
   componentDidMount() {
-    const storageRecipes = returnItem(CONFIG.RECIPES_STORAGE);
-    storageRecipes && this.setState({ recipesList: storageRecipes });
+      const storageRecipes = returnItem(CONFIG.RECIPES_STORAGE);
+    // I have used setTimeout to imitate data request
+    setTimeout(() => {
+      this.setState(() => {
+        if (storageRecipes && storageRecipes.length) return { recipesList: [ ...storageRecipes ], dataAvailable: true };
+        return { recipesList: [ ...store.recipesList ], dataAvailable: true };
+      });
+    }, 2000);
   }
 
   toggleModal = (recipeID = '') => {
@@ -39,6 +51,8 @@ class RecipesApp extends Component {
   };
 
   editRecipe = (name, ingredients) => {
+    if (!name && !ingredients) return;
+
     const {
       recipesList,
       activeRecipeID,
@@ -47,8 +61,8 @@ class RecipesApp extends Component {
     const updatedRecipesList = recipesList.map((recipe) => {
       if (recipe.id === activeRecipeID ) return {
         name,
-        ingredients: ingredients.split(' '),
-        id: uuid()
+        ingredients: translateTextToArray(ingredients),
+        id: recipe.id,
       };
       return recipe
      });
@@ -72,7 +86,7 @@ class RecipesApp extends Component {
   };
 
   addRecipe = (name, ingredients) => {
-    const newRecipe = { name, ingredients: ingredients.split(' '), id: uuid() };
+    const newRecipe = { name, ingredients: translateTextToArray(ingredients), id: uuid() };
     this.setState((prevState) => {
       return { recipesList: [ ...prevState.recipesList, newRecipe ]};
     }, () => {
@@ -81,8 +95,13 @@ class RecipesApp extends Component {
     });
   };
 
-  render() {
-    const { showModal } = this.state;
+  handleRenderLogic() {
+    const {
+      showModal,
+      recipesList,
+      activeRecipeID,
+      dataAvailable,
+    } = this.state;
     const {
       toggleModal,
       findRecipe,
@@ -91,20 +110,52 @@ class RecipesApp extends Component {
       addRecipe,
     } = this;
 
-    return (
-      <div className='app'>
+    if (dataAvailable) {
+      return (
         <RecipesContext.Provider value={
           {
             data: this.state,
-            actions: { toggleModal, findRecipe, editRecipe, deleteRecipe, addRecipe }
+            actions: { toggleModal, deleteRecipe }
           }
         }>
-          <RecipesList />
-          <button onClick={() => this.toggleModal()}>
+          {recipesList.length ?
+            <RecipesList
+              recipesList={recipesList}
+            /> :
+            <p className='app__warning-message'>Your recipes list is empty</p>
+          }
+          <button
+            className='app__main-button button'
+            onClick={() => this.toggleModal()}
+          >
             Add recipe
           </button>
-          {showModal && <RecipeModal />}
+          {showModal &&
+          <Modal>
+            <RecipeForm
+              activeRecipeID={activeRecipeID}
+              toggleModal={toggleModal}
+              findRecipe={findRecipe}
+              editRecipe={editRecipe}
+              addRecipe={addRecipe}
+            />
+          </Modal>
+          }
         </RecipesContext.Provider>
+      );
+    }
+
+    return <Loader />;
+  }
+
+  render() {
+    return (
+      <div className='app'>
+        <Header />
+        <Jumbotron callToAction='List of your everyday recipes:' />
+        <div className='app__container container'>
+          {this.handleRenderLogic()}
+        </div>
       </div>
     );
   }
