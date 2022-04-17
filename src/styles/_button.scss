@@ -1,0 +1,24 @@
+.button {
+  padding: $page-gutter / 2;
+  width: $button-width;
+  background-color: $light-green;
+  border: 0;
+  text-transform: uppercase;
+  font-size: $button-font-size;
+  transition: all .3s;
+
+  &--secondary {
+    background-color: $red;
+    color: $white;
+  }
+
+  &--tertiary {
+    background-color: $blue;
+    color: $white;
+  }
+
+  &:hover {
+    cursor: pointer;
+    opacity: .7;
+  }
+}

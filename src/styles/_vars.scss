@@ -1,0 +1,54 @@
+// spacing
+
+$page-gutter: 30px;
+
+// media queries breakpoints:
+
+$tablet-width: 768px;
+$desktop-width: 992px;
+$desktop-lg-width: 1200px;
+
+// container max width:
+
+$container-mobile-max-width: 540px;
+$container-tablet-max-width: 720px;
+$container-desktop-max-width: 960px;
+$container-desktop-lg-max-width: 1140px;
+
+
+// components:
+
+// general
+
+$box-shadow-major: 1px 1px 1px $dimmed-black;
+$box-shadow-minor: 1px 1px 1px $gray;
+
+// logo
+$logo-size: 46px;
+$logo-title-font-size: 14px;
+
+// modal
+$modal-background-color: rgba(0, 0, 0, .3);
+
+// button
+
+$button-width: 180px;
+$button-font-size: 16px;
+
+// form fields
+
+$form-field-font-size: 14px;
+$form-field-border-radius: 5px;
+$form-textarea-height: 120px;
+
+// icons
+
+$icon-size: 16px;
+
+// loader
+
+$loader-bounce-size: 18px;
+
+// warning message
+
+$warning-message-font-size: 16px;

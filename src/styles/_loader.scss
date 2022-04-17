@@ -1,0 +1,30 @@
+.loader {
+  margin: ($page-gutter *2) auto;
+  text-align: center;
+
+  & > div {
+    width: $loader-bounce-size;
+    height: $loader-bounce-size;
+    background-color: #333;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: bouncedelay 1.4s infinite ease-in-out both;
+    animation: bouncedelay 1.4s infinite ease-in-out both;
+  }
+
+  &__text {
+    font-weight: normal;
+  }
+
+  &__bounce {
+    &:nth-of-type(1) {
+      -webkit-animation-delay: -0.32s;
+      animation-delay: -0.32s;
+    }
+
+    &:nth-of-type(2) {
+      -webkit-animation-delay: -0.16s;
+      animation-delay: -0.16s;
+    }
+  }
+}

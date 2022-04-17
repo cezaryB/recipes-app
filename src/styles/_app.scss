@@ -1,0 +1,224 @@
+.app {
+  min-height: 100vh;
+  padding-bottom: $page-gutter * 2;
+  background-color: $light-gray;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    padding: $page-gutter / 2;
+    background-color: $white;
+    text-align: left;
+  }
+
+  &__header-logo {
+    width: $logo-size;
+    height: $logo-size;
+  }
+
+  &__header-title {
+    flex-basis: 100%;
+    width: 100%;
+    margin: 0;
+    font-weight: normal;
+    font-style: italic;
+    font-size: $logo-title-font-size;
+    text-align: left;
+  }
+
+  &__container {
+    padding-top: $page-gutter / 2;
+    padding-bottom: $page-gutter / 2;
+    background-color: $white;
+    box-shadow: $box-shadow-major;
+    -webkit-box-shadow: $box-shadow-major;
+    -moz-box-shadow: $box-shadow-major;
+  }
+
+  &__jumbotron {
+    padding: ($page-gutter * 3) 0;
+    background-color: $dimmed-green;
+    color: $white;
+  }
+
+  &__jumbotron-title {
+    margin: 0;
+    font-size: 36px;
+    font-weight: normal;
+  }
+
+  &__recipes-container {
+    background-color: $white;
+  }
+
+  &__recipe {
+    margin: ($page-gutter / 6) 0;
+    padding: ($page-gutter / 3) ($page-gutter / 2);
+    box-shadow: $box-shadow-minor;
+    -webkit-box-shadow: $box-shadow-minor;
+    -moz-box-shadow: $box-shadow-minor;
+    transition: all .3s;
+  }
+
+  &__recipe-name {
+    margin: 0;
+    padding: ($page-gutter / 2) 0 0;
+    text-transform: uppercase;
+  }
+
+  &__recipe-content {
+    padding-bottom: $page-gutter / 2;
+    animation: slide-down .5s;
+    -webkit-animation: slide-down .5;
+  }
+
+  &__recipe-ingredients {
+    padding: 0;
+    list-style-type: none;
+  }
+
+  &__recipe-ingredient {
+    margin-bottom: 2px;
+    padding: $page-gutter / 4;
+    background-color: $light-gray;
+    animation: slide-left .5s;
+    -webkit-animation: slide-left .5s;
+  }
+
+  &__recipe-control,
+  &__recipe-form-control {
+    &:nth-of-type(n + 2) {
+      margin-top: $page-gutter / 5;
+    }
+  }
+
+  &__main-button {
+    margin: $page-gutter 0 0;
+  }
+
+  &__recipe-form-container {
+    background: white;
+    padding: 30px;
+  }
+
+  &__recipe-form-title {
+    margin: 0;
+    font-weight: normal;
+    font-size: 28px;
+  }
+
+  &__recipe-form {
+    padding: $page-gutter 0 0;
+  }
+
+  &__recipe-form-fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    margin: ($page-gutter / 3) 0;
+    padding: 0;
+    border: 0;
+  }
+
+  &__recipe-form-label {
+    margin-bottom: $page-gutter / 6;
+  }
+
+  &__recipe-form-field {
+    width: 100%;
+    padding: ($page-gutter / 2) ($page-gutter / 3);
+    border-radius: $form-field-border-radius;
+    border: 0;
+    background-color: $light-gray;
+    font-size: $form-field-font-size;
+
+    &:focus {
+      outline: none;
+      background-color: $dimmed-yellow;
+    }
+  }
+
+  &__recipe-form-textarea {
+    height: $form-textarea-height;
+  }
+
+  &__recipe-form-controls {
+    margin-top: $page-gutter / 2;
+  }
+
+  &__modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background: $modal-background-color;
+  }
+
+  &__modal-content {
+    position: relative;
+  }
+
+  &__icon {
+    height: $icon-size;
+    width: $icon-size;
+
+    &:hover {
+      cursor: pointer;
+      opacity: .7;
+    }
+  }
+
+  &__modal-close {
+    position: absolute;
+    top: $page-gutter / 2;
+    right: $page-gutter / 2;
+  }
+
+  &__warning-message {
+    margin: 0;
+    color: $red;
+  }
+
+
+  @include tablet {
+    &__header {
+      padding: ($page-gutter / 3) $page-gutter;
+    }
+
+    &__container {
+      transform: translateY(-($page-gutter * (4 / 3)));
+    }
+
+    &__recipe-control,
+    &__recipe-form-control {
+      &:nth-of-type(n + 2) {
+        margin-top: 0;
+        margin-left: $page-gutter / 5;
+      }
+    }
+  }
+
+  @include desktop {
+    &__recipe {
+      &:hover {
+        cursor: pointer;
+        transform: translateX(-($page-gutter / 3));
+      }
+    }
+
+    &__modal-content {
+      flex-basis: 50%;
+    }
+  }
+
+  @include desktop-lg {
+    &__header {
+      padding-left: $page-gutter * (4 / 3);
+    }
+  }
+}
